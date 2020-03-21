@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://unpkg.com/vue"></script>
+</head>
+<body>
+  <div id="vue-app">
+    <div class="form">
+      <label>Verifique quais são os divisores e se é um numero primo!</label>
+      <input name="number" v-model="number"/>
+      <button v-on:click="processNumber(number)">Enviar</button>
+    </div>
+    <div class="results">
+      <p>Primo: {{ prime }}</p>
+      <p>Divisores: {{ divisors }} </p>
+    </div>
+  </div>
+
+
+  <script>
+    const url = "http://localhost:3000";
+
+    var vueApp = new Vue({
+      el: '#vue-app',
+      data: {
+        number: "",
+        divisors: "",
+        prime: ""
+      },
+      methods: {
+        processNumber: function (number) {
+          fetch(`${url}/checkNumber/`+number, {
+            method: "GET"          
+          }).then(response => response.json())
+          .then(result =>{
+            this.divisors = result.divisors.join(", ");
+            this.prime = result.prime ? "É primo" : "Não é primo";
+          });
+        }
+      }
+      
+    })
+  </script>
+</body>
+</html>

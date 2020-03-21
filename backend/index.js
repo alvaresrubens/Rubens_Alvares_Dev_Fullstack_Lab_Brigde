@@ -11,11 +11,11 @@ app.use(
 );
 
 //
-// Post route to check prime numbers
+// Get route to check prime numbers
 //
-app.post("/checkNumber", function (req, res) {
+app.get("/checkNumber/:number", function (req, res) {
 
-    let number = req.body.number;
+    let number = req.params.number;
     try {
         let result = checkDivisors(number);
         res.statusCode = 200;

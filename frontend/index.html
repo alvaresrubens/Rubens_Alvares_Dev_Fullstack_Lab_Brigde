@@ -6,44 +6,117 @@
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="https://unpkg.com/vue"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 </head>
 <body>
-  <div id="vue-app">
+  <div id="vue-app" class="main">
     <div class="form">
-      <label>Verifique quais são os divisores e se é um numero primo!</label>
-      <input name="number" v-model="number"/>
-      <button v-on:click="processNumber(number)">Enviar</button>
+      <h1 class="page-title text-primary">Primr</h1>
+      <input class="number-input form-control" name="number" v-model="number" placeholder="Verifique quais são os divisores e se é um numero primo!"/>
+      <div class="prime-helper">
+        <a data-toggle="collapse" href="#collapseExample">O que é um número primo?</a>
+      </div>
+
+      <div class="collapse" id="collapseExample">
+        <div class="card card-body">
+          Número primo é qualquer número cujo conjunto dos divisores não inversíveis não é vazio, e todos os seus elementos são produtos de por números inteiros inversíveis. De acordo com esta definição, e não são números primos.
+        </div>
+      </div>
+      <button class="button-submit btn btn-primary" v-on:click="processNumber(number)">Enviar</button>
     </div>
-    <div class="results">
-      <p>Primo: {{ prime }}</p>
-      <p>Divisores: {{ divisors }} </p>
+    <div class="result-list">      
+      <div class="result" v-for="result in resultsList">
+        <div class="card result-card">
+          <div class="card-body">
+            <p class="result-text card-title">Número: {{ result.number }}</p>
+            <p class="result-text card-text">Primo: {{ (result.isPrime ? "É primo" : "Não é primo")}}</p>
+            <p class="result-text card-text">Divisores: {{ result.divisors }} </p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
-
   <script>
     const url = "http://localhost:3000";
+
+    function SelectedNumber() {
+      this.number = '';
+      this.divisors = '';
+      this.isPrime = false;
+    }
 
     var vueApp = new Vue({
       el: '#vue-app',
       data: {
         number: "",
         divisors: "",
-        prime: ""
+        prime: "",
+        resultsList: []
       },
       methods: {
         processNumber: function (number) {
           fetch(`${url}/checkNumber/`+number, {
             method: "GET"          
           }).then(response => response.json())
-          .then(result =>{
-            this.divisors = result.divisors.join(", ");
-            this.prime = result.prime ? "É primo" : "Não é primo";
+          .then(result => {
+            let newNumber = new SelectedNumber();
+            newNumber.number = result.number;
+            newNumber.divisors = result.divisors.join(", ");
+            newNumber.isPrime = result.prime;
+            this.resultsList.push(newNumber);
           });
         }
       }
       
     })
   </script>
+  <style>
+    .main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-top: 150px;
+    }
+    .form {
+      display: flex;
+      flex-direction: column;
+      width: 50vw;
+      align-items: center;
+    }
+    .number-input {
+      margin-top: 50px;
+      width: 100%;      
+    }
+    .button-submit {
+      width: 50%;
+      margin-top: 50px;
+    }
+    .page-title {
+      font-weight: bold;
+    }
+    .prime-helper {
+      align-self: flex-start;
+      font-size: 12px;
+    }
+    .result-list {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 50px;
+    }
+    .result-card {
+      margin: 20px;
+      width: 20rem;
+    }
+    .result-text {
+      text-align: justify;
+    }
+  </style>
 </body>
 </html>

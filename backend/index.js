@@ -56,7 +56,7 @@ const checkDivisors = (number) => {
         }
     }
     let isPrime = checkPrime(divisorList);
-    var result = { divisors: divisorList, prime: isPrime }
+    var result = { number: number, divisors: divisorList, prime: isPrime }
     return result;
 }
 

@@ -15,7 +15,7 @@
   <div id="vue-app" class="main">
     <div class="form">
       <h1 class="page-title text-primary">Primr</h1>
-      <input class="number-input form-control" id= "number-input" name="number" type="number" v-model="number" v-on:keyup.enter="processNumber(number)" placeholder="Insira um número e verifique quais são seus divisores e se o mesmo é um número primo"/>
+      <input class="number-input form-control" id="number-input" name="number" type="number" v-model="number" v-on:keyup.enter="processNumber(number)" placeholder="Insira um número e verifique quais são seus divisores e se o mesmo é um número primo"/>
       <div class="prime-helper">
         <a data-toggle="collapse" href="#collapseExample">O que é um número primo?</a>
       </div>
@@ -69,9 +69,8 @@
           }).then(response => {
             if(response.status == 200) {
               return response.json().then(result => {
-                
                 if (localStorage.getItem("list_numbers")) {
-                    this.resultsList = JSON.parse(localStorage.getItem("list_numbers"))
+                  this.resultsList = JSON.parse(localStorage.getItem("list_numbers"))
                 }
                 let newNumber = new SelectedNumber();
                 newNumber.number = result.number;
@@ -85,18 +84,21 @@
                 console.log(result.message);
               });
             }
-          });
-      },
-        clearData:function(){
+        });
+        },
+        clearData: function() {
           this.resultsList = [];
           localStorage.clear();
         }
-    },
-    mounted(){
+      },
+    mounted() {
       document.getElementById("number-input").focus();
-      this.resultsList = JSON.parse(localStorage.getItem("list_numbers"));
-      
-  }});
+
+      if (localStorage.getItem("list_numbers")) {
+        this.resultsList = JSON.parse(localStorage.getItem("list_numbers"))
+      }
+    }
+  });
   </script>
   <style>
     .main {

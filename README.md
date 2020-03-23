@@ -33,6 +33,8 @@ O Express é uma tecnologia que possibilita criar de forma rápida e flexível u
 Além de ser de fácil utilização, o Express foi compátivel com a utilização do cloud provider Heroku, facilitando assim a publicação da aplicação. 
 
 
+Para mais informações sobre o Express: https://expressjs.com/pt-br/
+
 ## Instalação e execução
 ### Instalação
 

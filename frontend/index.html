@@ -15,7 +15,7 @@
   <div id="vue-app" class="main">
     <div class="form">
       <h1 class="page-title text-primary">Primr</h1>
-      <input class="number-input form-control" name="number" v-model="number" placeholder="Verifique quais são os divisores e se é um numero primo!"/>
+      <input class="number-input form-control" id= "number-input" name="number" type="number" v-model="number" v-on:keyup.enter="processNumber(number)" placeholder="Verifique quais são os divisores e se é um numero primo"/>
       <div class="prime-helper">
         <a data-toggle="collapse" href="#collapseExample">O que é um número primo?</a>
       </div>
@@ -25,7 +25,11 @@
           Número primo é qualquer número cujo conjunto dos divisores não inversíveis não é vazio, e todos os seus elementos são produtos de por números inteiros inversíveis. De acordo com esta definição, e não são números primos.
         </div>
       </div>
-      <button class="button-submit btn btn-primary" v-on:click="processNumber(number)">Enviar</button>
+      <div class="button-list">
+        <button class="button-item button-submit btn btn-primary" v-on:click="processNumber(number)">Enviar</button>
+
+      </div>
+
     </div>
     <div class="result-list">      
       <div class="result" v-for="result in resultsList">
@@ -61,18 +65,27 @@
         processNumber: function (number) {
           fetch(`${url}/checkNumber/`+number, {
             method: "GET"          
-          }).then(response => response.json())
-          .then(result => {
-            let newNumber = new SelectedNumber();
-            newNumber.number = result.number;
-            newNumber.divisors = result.divisors.join(", ");
-            newNumber.isPrime = result.prime;
-            this.resultsList.push(newNumber);
+          }).then(response => {
+            if(response.status == 200) {
+              return response.json().then(result => {
+                let newNumber = new SelectedNumber();
+                newNumber.number = result.number;
+                newNumber.divisors = result.divisors.join(", ");
+                newNumber.isPrime = result.prime;
+                this.resultsList.push(newNumber);
+              });
+            } else {
+              return response.json().then(result => {
+                console.log(result.message);
+              });
+            }
           });
-        }
       }
+    },
+    mounted(){
+      document.getElementById("number-input").focus();
       
-    })
+  }});
   </script>
   <style>
     .main {
@@ -103,6 +116,17 @@
       align-self: flex-start;
       font-size: 12px;
     }
+    .button-list {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;      
+      justify-content: space-around;
+      width: 50%;           
+    }
+    .button-item {
+      margin-left:30px;
+      width: 100%;
+    }
     .result-list {
       display: flex;
       flex-direction: row;
@@ -117,6 +141,12 @@
     .result-text {
       text-align: justify;
     }
+    footer {    
+    text-align: center;
+    }
   </style>
 </body>
+<footer>
+  <p>Feito por: Rubens David Alvares da Silva </p>
+</footer>
 </html>

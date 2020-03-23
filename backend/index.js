@@ -1,10 +1,10 @@
 
-var express = require('express');
-var app = express();
-var cors = require('cors')
+const express = require('express');
+const app = express();
 const bodyParser = require('body-parser');
+const serveStatic = require('serve-static')
+const path = require('path')
 
-app.use(cors());
 
 app.use(bodyParser.json());
 app.use(
@@ -14,10 +14,22 @@ app.use(
 );
 
 //
+// Set frontend as our directory for static vue html file
+//
+app.use('/', serveStatic(path.join(__dirname, '../frontend')));
+
+//
+// Serve index.html to root route
+//
+app.get('/', function (req, res) {
+    res.sendFile(path.join(__dirname, '../frontend/index.html'));
+});
+
+
+//
 // Get route to check prime numbers
 //
 app.get("/checkNumber/:number", function (req, res) {
-
     let number = req.params.number;
     try {
         let result = checkDivisors(number);

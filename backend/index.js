@@ -1,7 +1,10 @@
 
 var express = require('express');
 var app = express();
+var cors = require('cors')
 const bodyParser = require('body-parser');
+
+app.use(cors());
 
 app.use(bodyParser.json());
 app.use(
@@ -22,9 +25,9 @@ app.get("/checkNumber/:number", function (req, res) {
         res.send(result);
 
     } catch (error) {
-        let result = error.message;
+        let errorMessage = { message: error.message };
         res.statusCode = 400;
-        res.send(result);
+        res.send(errorMessage);
     }
 });
 
@@ -44,6 +47,7 @@ const validateNumber = (number) => {
 //
 const checkDivisors = (number) => {
 
+    let inputNumber = number;
     validateNumber(number);
 
     let divisorList = [];
@@ -56,7 +60,7 @@ const checkDivisors = (number) => {
         }
     }
     let isPrime = checkPrime(divisorList);
-    var result = { number: number, divisors: divisorList, prime: isPrime }
+    var result = { number: inputNumber, divisors: divisorList, prime: isPrime }
     return result;
 }
 

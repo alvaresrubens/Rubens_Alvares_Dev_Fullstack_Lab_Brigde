@@ -27,6 +27,7 @@
       </div>
       <div class="button-list">
         <button class="button-item button-submit btn btn-primary" v-on:click="processNumber(number)">Enviar</button>
+        <button class="button-item button-submit btn btn-danger" v-on:click="clearData()">Limpar histórico</button>
 
       </div>
 
@@ -90,8 +91,10 @@
     mounted(){
       document.getElementById("number-input").focus();
       this.resultsList = JSON.parse(localStorage.getItem("list_numbers"));
-      
-  }});
+    },
+    clearData(){
+      this.resultsList = [],
+    }});
   </script>
   <style>
     .main {

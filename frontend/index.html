@@ -68,11 +68,16 @@
           }).then(response => {
             if(response.status == 200) {
               return response.json().then(result => {
+                
+                if (localStorage.getItem("list_numbers")) {
+                    this.resultsList = JSON.parse(localStorage.getItem("list_numbers"))
+                }
                 let newNumber = new SelectedNumber();
                 newNumber.number = result.number;
                 newNumber.divisors = result.divisors.join(", ");
                 newNumber.isPrime = result.prime;
                 this.resultsList.push(newNumber);
+                localStorage.setItem("list_numbers", JSON.stringify(this.resultsList));
               });
             } else {
               return response.json().then(result => {

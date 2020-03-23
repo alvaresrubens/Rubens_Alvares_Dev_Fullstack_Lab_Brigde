@@ -86,15 +86,16 @@
               });
             }
           });
-      }
+      },
+        clearData:function(){
+          this.resultsList = [];
+        }
     },
     mounted(){
       document.getElementById("number-input").focus();
       this.resultsList = JSON.parse(localStorage.getItem("list_numbers"));
-    },
-    clearData(){
-      this.resultsList = [],
-    }});
+      
+  }});
   </script>
   <style>
     .main {

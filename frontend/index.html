@@ -89,6 +89,7 @@
     },
     mounted(){
       document.getElementById("number-input").focus();
+      this.resultsList = JSON.parse(localStorage.getItem("list_numbers"));
       
   }});
   </script>
